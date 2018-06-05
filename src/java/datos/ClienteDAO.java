@@ -20,13 +20,13 @@ import util.ServiceLocator;
  * @author sebastianbd
  */
 public class ClienteDAO {
-    public Cliente regCliente(Cliente cliente, String rep_asociado) throws RHException, Exception {
+    public Cliente regCliente(Cliente cliente) throws RHException, Exception {
       try {
         String strSQL = "INSERT  INTO CLIENTE VALUES (\'"+ cliente.getCodigo()+"\',\' "+cliente.getNombre() + " "
                         + "\',\' "+cliente.getApellido()+"\',\' "+cliente.getDireccion()+"\',\' "+ cliente.getCiudad()
-                        +"\' ,\' "+cliente.getTelefono()+"\',\' "+cliente.getCorreo()+"\' ,\'"+rep_asociado+ "\')";
+                        +"\' ,\' "+cliente.getTelefono()+"\',\' "+cliente.getCorreo()+"\')";
         Connection conexion = ServiceLocator.getInstance().tomarConexion();
-          PreparedStatement prepStmt = conexion.prepareStatement(strSQL);
+        PreparedStatement prepStmt = conexion.prepareStatement(strSQL);
         prepStmt.executeUpdate();
         prepStmt.close();
         ServiceLocator.getInstance().commit();

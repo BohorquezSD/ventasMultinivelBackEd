@@ -29,7 +29,7 @@ public class GeneraUsuarioDAO {
         Connection conexion = ServiceLocator.getInstance().tomarConexion();
         PreparedStatement prepStmt = conexion.prepareStatement(strSQL);
         prepStmt.executeQuery();
-           System.out.println("Se creo el cliente");
+           System.out.println("Se creo el usuario");
       } catch (SQLException e) {
            throw new RHException( "RegistroDAO", "Error: "+ e.getMessage());
       }  finally {

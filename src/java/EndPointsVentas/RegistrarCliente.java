@@ -6,16 +6,15 @@
 package EndPointsVentas;
 
 import datos.ClienteDAO;
-import datos.PrivilegiosDAO;
 import datos.GeneraUsuarioDAO;
-import java.util.ArrayList;
+import datos.RepClienteDAO;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import negocio.Cliente;
-import negocio.Privilegio;
+import negocio.RepCliente;
 import org.json.simple.JSONObject;
 import util.RHException;
 import util.Util;
@@ -33,7 +32,8 @@ public class RegistrarCliente extends Util {
             @QueryParam("codigoRep") String codRepVentas,@QueryParam("codigo") String cedula,
             @QueryParam("nombre") String nombre, @QueryParam("apellido") String apellido,
             @QueryParam("direccion") String direccion,@QueryParam("ciudad") String ciudad,
-            @QueryParam("telefono") String telefono, @QueryParam("correo") String correo
+            @QueryParam("telefono") String telefono, @QueryParam("correo") String correo,
+            @QueryParam("fecha") String fechaIni
             )throws RHException, Exception{
         
         conectarBD(usuario,password);
@@ -41,6 +41,9 @@ public class RegistrarCliente extends Util {
         ClienteDAO cliDao = new ClienteDAO();
         JSONObject obj = new JSONObject();
         Cliente cliente = new Cliente();
+        RepCliente repCliente = new RepCliente();
+        RepClienteDAO repClienteDAO = new RepClienteDAO();
+//codRepVentas
         try{
             cliente.setCodigo(cedula);
             cliente.setNombre(nombre);
@@ -49,9 +52,16 @@ public class RegistrarCliente extends Util {
             cliente.setCiudad(ciudad);
             cliente.setTelefono(telefono);
             cliente.setCorreo(correo);
-            cliDao.regCliente(cliente, codRepVentas);
+            cliDao.regCliente(cliente);
+            
+            repCliente.setIdCli(cedula);
+            repCliente.setIdRep(codRepVentas);
+            repCliente.setFechaInicio("(select CURRENT_DATE from dual)");
+            repCliente.setFechaFin("NULL");
+            
             
             regCliDao.crearCliente(nombre);
+            repClienteDAO.regRepCliente(repCliente);
             System.out.println("SE CREO EL Cliente");
             regCliDao.darPermisos(nombre);
         obj.put("estado", "correctamente ingresado");
